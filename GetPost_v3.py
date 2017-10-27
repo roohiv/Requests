@@ -8,7 +8,7 @@ import HTMLTestRunner
 import unittest
 import textwrap
 import os, errno, logging
-import sys, re, pytest
+import sys, re, urllib3
 
 #function to GET response
 def GetResponse(url, username, password, uniqueval):
@@ -28,6 +28,7 @@ def GetResponse(url, username, password, uniqueval):
                     log.info("Try " + str(flag_g) + " :To Get your unique Json", extra={'timestamp': timestamp})
                 #response = requests.get(url, auth=(username, password))
                 response = requests.get(url, auth=(username, password), verify=False, timeout=60)
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
                 flag_g += 1
             testrespose = response.content
             testrespose = json.loads(testrespose)
@@ -114,6 +115,9 @@ def PostRequest(url, username, password, payload, i):
         try:
             #r = requests.post(url=url, data=payload, auth=(username, password))
             r = requests.post(url=url, data=payload, auth=(username, password), verify=False)
+            #urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            #from requests.packages import InsecureRequestWarning
+            #requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             log.info("Post :"+str(r), extra={'timestamp': timestamp})
             if r.ok:
                 log.info("Request: " + payload, extra={'timestamp': timestamp})
@@ -269,7 +273,7 @@ def VerifyJson(responseout, responsedata):
                 result.append(VerifyChildObject(nested_key, responseout, str(v), x))
                 # print responsedata
             elif k in responseout.keys():
-                if responseout[k].value == v:
+                if responseout[k] == v:
                     result.append("True")
                 else:
                     result.append("Key- " + str(k) + " value:" + str(v) + "not present in response ")
@@ -284,8 +288,14 @@ def VerifyJson(responseout, responsedata):
             j += 1
     if not (len(resultx) > 0):
         resultx.insert(0, "PASS")
+        print "-----------------------------------------------------------------------------------"
+        print " PASS                                                                              "
+        print "-----------------------------------------------------------------------------------"
         return str(resultx)
     else:
+        print "-----------------------------------------------------------------------------------"
+        print " FAIL                                                                             "
+        print "-----------------------------------------------------------------------------------"
         return "FAIL : Values not found or changed : " + str(resultx)
 
 
@@ -346,6 +356,7 @@ def UpdateJson(json_name, testdata):
                         parent_json = UpdateChildObject(nested_key, parent_json, v)
                     except IndexError:
                         parent_json = "You have set more parameters than Request Json can accomodate"
+                        return parent_json
                 else:
                     parent_json[k] = v
      parent_json = json.dumps(parent_json, ensure_ascii=False)
@@ -433,9 +444,9 @@ def ReadFromExcel(worksheet, cur_col, uniqueval, tag, startkeyword, endkeyword):
             if isinstance(worksheet.cell(curr_row, cur_col).value, (int, float)):
                 testdata[str(worksheet.cell(curr_row, 0).value).strip()] = worksheet.cell(curr_row, cur_col).value
             else:
-                if re.search("epochmicro", (worksheet.cell(curr_row, cur_col).value).strip()):
+                if re.search("epochmicro", worksheet.cell(curr_row, cur_col).value):
                     testdata[str(worksheet.cell(curr_row, 0).value).strip()] = timemicroseconds
-                elif re.search("epochtime", (worksheet.cell(curr_row, cur_col).value).strip()):
+                elif re.search("epochtime", worksheet.cell(curr_row, cur_col).value):
                     testdata[(worksheet.cell(curr_row, 0).value).strip()] = timestamp
                 else:
                     testdata[(worksheet.cell(curr_row, 0).value).strip()] = (worksheet.cell(curr_row, cur_col).value).strip()
