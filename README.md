@@ -42,9 +42,6 @@ A config.ini, sampledata.json and mapping.xls file on your PC workstation for ex
 
 2.	Identify the path of the directory containing the config.ini, sampledata.json and mapping.xls files for the automation scenarios to be  run. 
 
-3.	Execute the following command to run the automation:
-
-robot –d <pathToDirectoryIdentifiedInStep2>  fm-test-controller.robot
 
 Execute command Example:
 
