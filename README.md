@@ -45,10 +45,10 @@ A config.ini, sampledata.json and mapping.xls file on your PC workstation for ex
 
 Execute command Example:
 
-c:\path to code files>robot -d <path to config>  fm-test-controller.robot
+c:\path to code files>robot -d (path to config)  fm-test-controller.robot
 
 
-Result
+Results
 
 1.	A Result folder will be created in the path(path of config file) which will contain html results for executed test cases.
 
