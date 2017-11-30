@@ -1,0 +1,20 @@
+{
+  "syslogProcId": "",
+  "eventId": "",
+  "otherSubElementInst": "",
+  "syslogNodeId": "",
+  "syslogProc": "",
+  "otherSiteInst": "",
+  "eventSourceHostname": "",
+  "Priority": "",
+  "syslogTag": "",
+  "otherSubElementTp": "",
+  "otherElementInst": "",
+  "otherSiteId": "",
+  "otherRuleName": "",
+  "otherElementTp": "",
+  "startEpochMicrosec": "",
+  "syslogMsg": "",
+  "otherCollector": "",
+  "eventStartTimestamp": ""
+}
